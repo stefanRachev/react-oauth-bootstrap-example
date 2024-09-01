@@ -1,0 +1,18 @@
+/* Footer.module.css */
+.footer {
+    background-color: #343a40; /* Черен фон */
+    color: #ffffff; /* Бял текст */
+    padding: 1rem;
+    text-align: center; 
+    margin-top: auto;
+  }
+  
+  .footer a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  

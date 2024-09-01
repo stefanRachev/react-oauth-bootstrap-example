@@ -1,18 +1,19 @@
 import { Container, Row, Col } from "react-bootstrap";
+import styles from "./Footer.module.css";
 
 function Footer() {
   return (
-    <footer className="bg-dark text-white py-3">
+    <footer className={styles.footer}>
       <Container>
         <Row>
-          <Col className="text-center">
+          <Col>
             <p>&copy; 2024 My React App</p>
             <p>
-              <a href="#privacy" className="text-white">
+              <a href="#privacy" className={styles.link}>
                 Privacy Policy
               </a>{" "}
               |
-              <a href="#terms" className="text-white">
+              <a href="#terms" className={styles.link}>
                 Terms of Service
               </a>
             </p>

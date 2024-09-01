@@ -5,11 +5,6 @@ function HomePage() {
     <Container>
       <Row className="justify-content-center">
         <Col md={8}>
-          <header className="text-center mb-4">
-            <h1>Welcome to Our App</h1>
-            <p>Your one-stop solution for all your needs</p>
-          </header>
-
           <Row className="mb-4">
             <Col md={4}>
               <Card>
@@ -45,10 +40,6 @@ function HomePage() {
               </Card>
             </Col>
           </Row>
-
-          <footer className="text-center mt-4">
-            <p>&copy; 2024 My React App. All rights reserved.</p>
-          </footer>
         </Col>
       </Row>
     </Container>
