@@ -12,8 +12,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-
-
 mongoose
   .connect("mongodb://127.0.0.1:27017/authBootstrap")
   .then(() => console.log("DB successfully connected"))
@@ -33,7 +31,7 @@ app.get("/", (req, res) => {
   res.send("test ok");
 });
 
-app.use(router)
+//app.use(router)
 
 
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}....`));
