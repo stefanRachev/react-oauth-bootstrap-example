@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 function Register() {
   const [formData, setFormData] = useState({
     email: "",
@@ -8,6 +10,8 @@ function Register() {
     confirmPassword: "",
     nickName: "",
   });
+
+  const [error, setError] = useState(""); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,10 +21,43 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Registration data:", formData);
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Passwords must be at least 6 characters long");
+      return;
+    }
+
+    try {
+      const response = await fetch(apiUrl + "/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          nickname: formData.nickName,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Registration successful:", data);
+        setError(""); 
+      } else {
+        setError(data.message || "Registration failed"); 
+      }
+    } catch (error) {
+      setError("An error occurred: " + error.message); 
+    }
   };
 
   return (
@@ -28,6 +65,8 @@ function Register() {
       <Row className="justify-content-center">
         <Col md={6}>
           <h2 className="text-center mb-4">Register</h2>
+          {error && <div className="alert alert-danger">{error}</div>}{" "}
+        
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email address</Form.Label>

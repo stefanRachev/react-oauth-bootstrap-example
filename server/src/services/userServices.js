@@ -8,6 +8,11 @@ const signToken = (userId) => {
 };
 
 exports.registerUser = async (email, password, nickname) => {
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    throw new Error("User already exists with this email");
+  }
+
   const newUser = await User.create({ email, password, nickname });
   return {
     token: signToken(newUser._id),
