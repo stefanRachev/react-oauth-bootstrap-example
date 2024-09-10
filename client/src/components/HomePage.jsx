@@ -1,6 +1,13 @@
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 
+import { useUser } from "../useUser";
+
 function HomePage() {
+  const { user } = useUser();
+
+  
+  
+
   return (
     <Container>
       <Row className="justify-content-center">
@@ -38,6 +45,24 @@ function HomePage() {
                   <Button variant="primary">Learn More</Button>
                 </Card.Body>
               </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              {/* Показване на данните от контекста */}
+              <h2>User Information</h2>
+              {user ? (
+                <div>
+                  <p>
+                    <strong>Username:</strong> {user.username}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {user.email}
+                  </p>
+                </div>
+              ) : (
+                <p>No user data available. Please log in.</p>
+              )}
             </Col>
           </Row>
         </Col>

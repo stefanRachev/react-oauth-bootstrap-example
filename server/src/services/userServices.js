@@ -27,7 +27,10 @@ exports.loginUser = async (email, password) => {
     throw new Error("Incorrect email or password");
   }
 
+  user.password = undefined;
+
   return {
     token: signToken(user._id),
+    user,
   };
 };
