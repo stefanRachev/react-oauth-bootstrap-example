@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -11,7 +12,8 @@ function Register() {
     username: "",
   });
 
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,12 +53,19 @@ function Register() {
 
       if (response.ok) {
         console.log("Registration successful:", data);
-        setError(""); 
+        setError("");
+        setFormData({
+          email: "",
+          password: "",
+          confirmPassword: "",
+          username: "",
+        });
+        navigate("/");
       } else {
-        setError(data.message || "Registration failed"); 
+        setError(data.message || "Registration failed");
       }
     } catch (error) {
-      setError("An error occurred: " + error.message); 
+      setError("An error occurred: " + error.message);
     }
   };
 
@@ -66,7 +75,6 @@ function Register() {
         <Col md={6}>
           <h2 className="text-center mb-4">Register</h2>
           {error && <div className="alert alert-danger">{error}</div>}{" "}
-        
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email address</Form.Label>
