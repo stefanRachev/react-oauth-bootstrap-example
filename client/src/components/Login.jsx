@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,10 +21,37 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   
-    console.log("Login data:", formData);
+
+    try {
+      const response = await fetch(apiUrl + "/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login successful:", data);
+        setError("");
+        setFormData({
+          email: "",
+          password: "",
+        });
+        navigate("/");
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (error) {
+      setError("An error occurred: " + error.message);
+    }
   };
 
   return (
@@ -26,6 +59,7 @@ function Login() {
       <Row className="justify-content-center">
         <Col md={6}>
           <h2 className="text-center mb-4">Login</h2>
+          {error && <div className="alert alert-danger">{error}</div>}
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email address</Form.Label>
@@ -62,3 +96,4 @@ function Login() {
 }
 
 export default Login;
+
