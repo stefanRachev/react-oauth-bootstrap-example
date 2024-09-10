@@ -8,7 +8,7 @@ function Register() {
     email: "",
     password: "",
     confirmPassword: "",
-    nickName: "",
+    username: "",
   });
 
   const [error, setError] = useState(""); 
@@ -43,7 +43,7 @@ function Register() {
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
-          nickname: formData.nickName,
+          username: formData.username,
         }),
       });
 
@@ -104,13 +104,13 @@ function Register() {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formNickName">
-              <Form.Label>Nick Name</Form.Label>
+            <Form.Group className="mb-3" controlId="formUsername">
+              <Form.Label>Username</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Nick Name"
-                name="nickName"
-                value={formData.nickName}
+                placeholder="Username"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 required
               />

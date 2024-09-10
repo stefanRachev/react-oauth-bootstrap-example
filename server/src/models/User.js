@@ -13,15 +13,23 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
-  nickname: {
+  username: {
     type: String,
     required: true,
   },
 });
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+
+  if (this.isModified("username")) {
+    this.username =
+      this.username.charAt(0).toUpperCase() +
+      this.username.slice(1).toLowerCase();
+  }
+
   next();
 });
 
