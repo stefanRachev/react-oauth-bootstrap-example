@@ -5,6 +5,8 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import HomePage from "./components/HomePage";
 import NoPage from "./components/NoPage";
+import Logout from "./components/Logout";
+
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 
@@ -19,6 +21,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>

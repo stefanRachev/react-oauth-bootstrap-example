@@ -40,6 +40,7 @@ function Login() {
 
       if (response.ok) {
         console.log("Login successful:", data);
+        localStorage.setItem("token", data.token);
         setError("");
         setFormData({
           email: "",
@@ -96,4 +97,3 @@ function Login() {
 }
 
 export default Login;
-

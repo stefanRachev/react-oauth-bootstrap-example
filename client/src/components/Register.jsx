@@ -53,6 +53,7 @@ function Register() {
 
       if (response.ok) {
         console.log("Registration successful:", data);
+        localStorage.setItem("token", data.token);
         setError("");
         setFormData({
           email: "",
