@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -5,6 +6,26 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 
 function Navigation() {
+  useEffect(() => {
+    const handleLinkClick = () => {
+      const navToggle = document.querySelector(".navbar-toggler");
+      if (navToggle) {
+        navToggle.click();
+      }
+    };
+
+    const navLinks = document.querySelectorAll(".nav-link");
+    navLinks.forEach((link) => {
+      link.addEventListener("click", handleLinkClick);
+    });
+
+    return () => {
+      navLinks.forEach((link) =>
+        link.removeEventListener("click", handleLinkClick)
+      );
+    };
+  }, []);
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -24,7 +45,11 @@ function Navigation() {
             <Nav.Link as={Link} to="/logout">
               Logout
             </Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+            <NavDropdown
+              className="d-lg-none"
+              title="Dropdown"
+              id="basic-nav-dropdown"
+            >
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
                 Another action
