@@ -40,9 +40,14 @@ function Navigation() {
               Home
             </Nav.Link>
             {user ? (
-              <Nav.Link as={Link} to="/logout">
-                Logout
-              </Nav.Link>
+              <>
+                <Nav.Link as={Link} to="/logout">
+                  Logout
+                </Nav.Link>
+                <Nav.Link as={Link} to="/protectedAccordion">
+                Protected Accordion
+                </Nav.Link>
+              </>
             ) : (
               <>
                 <Nav.Link as={Link} to="/register">

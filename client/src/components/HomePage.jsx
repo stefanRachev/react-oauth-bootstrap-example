@@ -49,7 +49,7 @@ function HomePage() {
           </Row>
           <Row>
             <Col>
-              {/* Показване на данните от контекста */}
+            
               <h2>User Information</h2>
               {user ? (
                 <div>
