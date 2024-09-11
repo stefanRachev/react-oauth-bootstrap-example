@@ -3,9 +3,12 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { useUser } from "../context/useUser";
 import { Link } from "react-router-dom";
 
 function Navigation() {
+  const { user } = useUser();
+
   useEffect(() => {
     const handleLinkClick = () => {
       const navToggle = document.querySelector(".navbar-toggler");
@@ -36,15 +39,22 @@ function Navigation() {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/register">
-              Register
-            </Nav.Link>
-            <Nav.Link as={Link} to="/login">
-              Login
-            </Nav.Link>
-            <Nav.Link as={Link} to="/logout">
-              Logout
-            </Nav.Link>
+            {user ? (
+              <Nav.Link as={Link} to="/logout">
+                Logout
+              </Nav.Link>
+            ) : (
+              <>
+                <Nav.Link as={Link} to="/register">
+                  Register
+                </Nav.Link>
+
+                <Nav.Link as={Link} to="/login">
+                  Login
+                </Nav.Link>
+              </>
+            )}
+
             <NavDropdown
               className="d-lg-none"
               title="Dropdown"
