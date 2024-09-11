@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -13,6 +14,7 @@ function Register() {
   });
 
   const [error, setError] = useState("");
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -54,6 +56,13 @@ function Register() {
       if (response.ok) {
         console.log("Registration successful:", data);
         localStorage.setItem("token", data.token);
+
+        setUser(data.user);
+        if (data.data && data.data.user) {
+          console.log("User data:", JSON.stringify(data.data.user));
+          setUser(data.data.user);
+        }
+
         setError("");
         setFormData({
           email: "",
