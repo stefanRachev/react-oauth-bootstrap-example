@@ -1,4 +1,5 @@
 const userService = require("../services/userServices");
+const User = require("../models/User")
 
 exports.register = async (req, res) => {
   try {
@@ -48,6 +49,30 @@ exports.login = async (req, res) => {
     res.status(401).json({
       status: "fail",
       message: err.message,
+    });
+  }
+};
+
+exports.getMe = async (req, res) => {
+  try {
+    
+    const user = await User.findById(req.user.id).select('-password');
+
+    if (!user) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      user, 
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Server error',
     });
   }
 };
