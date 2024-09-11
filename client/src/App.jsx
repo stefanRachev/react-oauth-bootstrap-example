@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import HomePage from "./components/HomePage";
 import NoPage from "./components/NoPage";
 import Logout from "./components/Logout";
-import { UserProvider } from "./UserContext";
+import { UserProvider } from "./context/UserContext";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 

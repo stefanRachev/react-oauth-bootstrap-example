@@ -1,6 +1,6 @@
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 
-import { useUser } from "../useUser";
+import { useUser } from "../context/useUser";
 
 function HomePage() {
   const { user } = useUser();

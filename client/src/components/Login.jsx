@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../context/UserContext";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
