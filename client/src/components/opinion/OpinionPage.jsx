@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import InputForm from "./InputForm";
+import InputForm from "./InputForm ";
 import OpinionList from "./OpinionList";
 
 function OpinionPage() {

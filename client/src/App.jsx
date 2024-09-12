@@ -5,7 +5,10 @@ import Login from "./components/Login";
 import HomePage from "./components/HomePage";
 import NoPage from "./components/NoPage";
 import Logout from "./components/Logout";
+import OpinionPage  from "./components/opinion/OpinionPage"
 import ProtectedAccordion from "./components/ProtectedAccordion";
+
+
 import { UserProvider } from "./context/UserContext";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -23,6 +26,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/protectedAccordion" element={<ProtectedAccordion />} />
+          <Route path="/opinion" element={<OpinionPage />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </main>

@@ -47,6 +47,9 @@ function Navigation() {
                 <Nav.Link as={Link} to="/protectedAccordion">
                 Protected Accordion
                 </Nav.Link>
+                <Nav.Link as={Link} to="/opinion">
+                Opinion Page
+                </Nav.Link>
               </>
             ) : (
               <>
