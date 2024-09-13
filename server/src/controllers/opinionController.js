@@ -10,6 +10,10 @@ exports.createOpinion = async (req, res) => {
     });
 
     await opinion.save();
+
+    // Попълваме полето за автора, за да върнем username
+    await opinion.populate("author", "username").execPopulate();
+
     res.status(201).json(opinion);
   } catch (error) {
     res.status(400).json({ message: "Error creating opinion", error });
@@ -26,7 +30,6 @@ exports.getAllOpinions = async (req, res) => {
   }
 };
 
-// Изтриване на мнение
 exports.deleteOpinion = async (req, res) => {
   try {
     const opinion = await Opinion.findById(req.params.id);
@@ -35,41 +38,49 @@ exports.deleteOpinion = async (req, res) => {
       return res.status(404).json({ message: "Opinion not found" });
     }
 
-    // Проверка дали потребителят е автор на мнението
     if (opinion.author.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ message: "You are not authorized to delete this opinion" });
     }
 
-    await opinion.remove();
+    await Opinion.deleteOne({ _id: req.params.id });
     res.json({ message: "Opinion deleted" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting opinion", error });
   }
 };
 
-// Редактиране на мнение
+
 exports.updateOpinion = async (req, res) => {
-  try {
-    const { text } = req.body;
-    const opinion = await Opinion.findById(req.params.id);
+    try {
+      const { text } = req.body;
 
-    if (!opinion) {
-      return res.status(404).json({ message: "Opinion not found" });
+  
+      if (!text) {
+        return res.status(400).json({ message: "Text is required" });
+      }
+  
+      const opinion = await Opinion.findById(req.params.id);
+      if (!opinion) {
+        return res.status(404).json({ message: "Opinion not found" });
+      }
+  
+      if (opinion.author.toString() !== req.user._id.toString()) {
+        return res.status(403).json({ message: "You are not authorized to edit this opinion" });
+      }
+  
+      opinion.text = text;
+      opinion.updatedAt = Date.now();
+      await opinion.save();
+  
+      
+      const populatedOpinion = await Opinion.findById(req.params.id).populate("author", "username").exec();
+  
+      res.json(populatedOpinion);
+    } catch (error) {
+      console.error("Error updating opinion:", error); // Лог на грешката
+      res.status(500).json({ message: "Error updating opinion", error });
     }
-
-    // Проверка дали потребителят е автор на мнението
-    if (opinion.author.toString() !== req.user._id.toString()) {
-      return res
-        .status(403)
-        .json({ message: "You are not authorized to edit this opinion" });
-    }
-
-    opinion.text = text;
-    await opinion.save();
-    res.json(opinion);
-  } catch (error) {
-    res.status(500).json({ message: "Error updating opinion", error });
-  }
-};
+  };
+  

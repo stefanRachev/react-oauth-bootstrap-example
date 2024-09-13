@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import InputForm from "./InputForm ";
 import OpinionList from "./OpinionList";
+import { useUser } from "../../context/useUser";
 
 function OpinionPage() {
   const [opinions, setOpinions] = useState([]);
+  const { user } = useUser();
+
+  console.log(user);
 
   useEffect(() => {
-   
     const fetchOpinions = async () => {
       try {
         const response = await fetch(
@@ -40,15 +43,56 @@ function OpinionPage() {
 
   const handleDeleteOpinion = async (id) => {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/opinions/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setOpinions(opinions.filter((opinion) => opinion.id !== id));
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/opinions/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setOpinions(opinions.filter((opinion) => opinion._id !== id));
+      } else {
+        console.error("Error deleting opinion:", await response.json());
+      }
     } catch (error) {
       console.error("Error deleting opinion:", error);
+    }
+  };
+
+  const handleEditOpinion = async (id, newText) => {
+    console.log("Updating opinion with id:", id);
+    console.log("New text:", newText);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/opinions/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text: newText }),
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("Error updating opinion:", error);
+      } else {
+        const updatedOpinion = await response.json();
+        setOpinions(
+          opinions.map((opinion) =>
+            opinion._id === id ? updatedOpinion : opinion
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating opinion:", error);
     }
   };
 
@@ -58,10 +102,10 @@ function OpinionPage() {
       <OpinionList
         opinions={opinions}
         onDelete={handleDeleteOpinion}
+        onEdit={handleEditOpinion}
       />
     </div>
   );
 }
 
 export default OpinionPage;
-

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { useUser } from "../../context/useUser";
@@ -5,26 +6,64 @@ import PropTypes from "prop-types";
 
 const OpinionList = ({ opinions, onDelete, onEdit }) => {
   const { user } = useUser();
+  const [editMode, setEditMode] = useState(null);
+  const [editText, setEditText] = useState("");
+
+  const handleEditClick = (opinion) => {
+    setEditMode(opinion._id);
+    setEditText(opinion.text);
+  };
+
+  const handleSaveClick = (id) => {
+    onEdit(id, editText);
+    setEditMode(null);
+  };
 
   return (
     <div>
       {opinions.map((opinion) => (
-        <Card key={opinion.id} className="mb-3">
+        <Card key={opinion._id} className="mb-3">
           <Card.Body>
-            <Card.Text>{opinion.text}</Card.Text>
-            {user && user.id === opinion.authorId && (
-              <>
+            {editMode === opinion._id ? (
+              <div>
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
                 <Button
-                  variant="warning"
-                  onClick={() => onEdit(opinion.id)}
-                  className="me-2"
+                  variant="primary"
+                  onClick={() => handleSaveClick(opinion._id)}
                 >
-                  Редактирай
+                  Save
                 </Button>
-                <Button variant="danger" onClick={() => onDelete(opinion.id)}>
-                  Изтрий
+                <Button variant="secondary" onClick={() => setEditMode(null)}>
+                  Cancel
                 </Button>
-              </>
+              </div>
+            ) : (
+              <div>
+                <Card.Text>{opinion.text}</Card.Text>
+                {user &&
+                  opinion.author &&
+                  user._id === opinion.author._id.toString() && (
+                    <>
+                      <Button
+                        variant="warning"
+                        onClick={() => handleEditClick(opinion)}
+                        className="me-2"
+                      >
+                        Редактирай
+                      </Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => onDelete(opinion._id)}
+                      >
+                        Изтрий
+                      </Button>
+                    </>
+                  )}
+              </div>
             )}
           </Card.Body>
         </Card>
@@ -36,9 +75,11 @@ const OpinionList = ({ opinions, onDelete, onEdit }) => {
 OpinionList.propTypes = {
   opinions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      _id: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
-      authorId: PropTypes.number.isRequired,
+      author: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+      }).isRequired,
     })
   ).isRequired,
   onDelete: PropTypes.func.isRequired,
