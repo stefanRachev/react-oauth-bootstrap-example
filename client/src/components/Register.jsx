@@ -56,8 +56,8 @@ function Register() {
       
 
       if (response.ok) {
-        console.log("Registration successful:", data.token);
-        localStorage.setItem("token", data.accessToken);
+        console.log("Registration successful:", data.accessToken);
+        localStorage.setItem("accessToken", data.accessToken);
 
         setUser(data.user);
         if (data.data && data.data.user) {

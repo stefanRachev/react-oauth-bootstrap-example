@@ -5,7 +5,7 @@ export const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(localStorage.getItem("accessToken"));
 
   // Function to refresh the token
   const refreshToken = useCallback(async () => {
@@ -18,14 +18,14 @@ export const UserProvider = ({ children }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            refreshToken: localStorage.getItem("refreshToken"),
+            accessToken: localStorage.getItem("accessToken"),
           }),
         }
       );
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("accessToken", data.accessToken);
         setToken(data.accessToken);
         return data.accessToken;
       } else {
@@ -42,6 +42,8 @@ export const UserProvider = ({ children }) => {
 
   // Function to fetch user data
   const fetchUser = useCallback(async () => {
+    console.log(token);
+    
     if (token) {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/me`, {
@@ -49,7 +51,8 @@ export const UserProvider = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+              console.log(response.status);
+              
         if (response.status === 401) {
           // Token is expired or invalid, try to refresh it
           const newToken = await refreshToken();
@@ -82,8 +85,8 @@ export const UserProvider = ({ children }) => {
   }, [fetchUser]);
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("accessToken");
+    //localStorage.removeItem("refreshToken");
     setUser(null);
     setToken(null);
   };
