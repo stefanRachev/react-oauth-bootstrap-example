@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -9,26 +9,6 @@ import { Link } from "react-router-dom";
 function Navigation() {
   const { user } = useUser();
 
-  useEffect(() => {
-    const handleLinkClick = () => {
-      const navToggle = document.querySelector(".navbar-toggler");
-      if (navToggle) {
-        navToggle.click();
-      }
-    };
-
-    const navLinks = document.querySelectorAll(".nav-link");
-    navLinks.forEach((link) => {
-      link.addEventListener("click", handleLinkClick);
-    });
-
-    return () => {
-      navLinks.forEach((link) =>
-        link.removeEventListener("click", handleLinkClick)
-      );
-    };
-  }, []);
-
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -36,33 +16,31 @@ function Navigation() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/" onClick={() => document.querySelector('.navbar-toggler').click()}>
               Home
             </Nav.Link>
             {user ? (
               <>
-                <Nav.Link as={Link} to="/logout">
+                <Nav.Link as={Link} to="/logout" onClick={() => document.querySelector('.navbar-toggler').click()}>
                   Logout
                 </Nav.Link>
-                <Nav.Link as={Link} to="/protectedAccordion">
-                Protected Accordion
+                <Nav.Link as={Link} to="/protectedAccordion" onClick={() => document.querySelector('.navbar-toggler').click()}>
+                  Protected Accordion
                 </Nav.Link>
-                <Nav.Link as={Link} to="/opinion">
-                Opinion Page
+                <Nav.Link as={Link} to="/opinion" onClick={() => document.querySelector('.navbar-toggler').click()}>
+                  Opinion Page
                 </Nav.Link>
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/register">
+                <Nav.Link as={Link} to="/register" onClick={() => document.querySelector('.navbar-toggler').click()}>
                   Register
                 </Nav.Link>
-
-                <Nav.Link as={Link} to="/login">
+                <Nav.Link as={Link} to="/login" onClick={() => document.querySelector('.navbar-toggler').click()}>
                   Login
                 </Nav.Link>
               </>
             )}
-
             <NavDropdown
               className="d-lg-none"
               title="Dropdown"
