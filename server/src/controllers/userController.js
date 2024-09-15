@@ -1,5 +1,11 @@
 const userService = require("../services/userServices");
 const User = require("../models/User");
+const RefreshToken = require("../models/RefreshToken")
+const jwt = require("jsonwebtoken");
+
+const signToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+};
 
 exports.register = async (req, res) => {
   try {
