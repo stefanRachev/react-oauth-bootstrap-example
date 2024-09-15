@@ -42,7 +42,7 @@ function Login() {
 
       if (response.ok) {
         console.log("Login successful:", data);
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.accessToken);
 
         setUser(data.user);
         if (data.data && data.data.user) {

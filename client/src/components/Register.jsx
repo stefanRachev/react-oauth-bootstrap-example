@@ -52,10 +52,12 @@ function Register() {
       });
 
       const data = await response.json();
+      //console.log(data.token);
+      
 
       if (response.ok) {
-        console.log("Registration successful:", data);
-        localStorage.setItem("token", data.token);
+        console.log("Registration successful:", data.token);
+        localStorage.setItem("token", data.accessToken);
 
         setUser(data.user);
         if (data.data && data.data.user) {
