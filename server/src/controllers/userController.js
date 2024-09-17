@@ -1,11 +1,9 @@
 const userService = require("../services/userServices");
 const User = require("../models/User");
-const RefreshToken = require("../models/RefreshToken")
+const RefreshToken = require("../models/RefreshToken");
 const jwt = require("jsonwebtoken");
 
-const signToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
-};
+
 
 exports.register = async (req, res) => {
   try {
@@ -18,7 +16,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({
       status: "success",
-      accessToken, 
+      accessToken,
       data: {
         user,
       },
@@ -46,7 +44,7 @@ exports.login = async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      accessToken, 
+      accessToken,
       data: {
         user,
       },
@@ -59,11 +57,10 @@ exports.login = async (req, res) => {
   }
 };
 
-
-
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
+    console.log("getMe" + user);
 
     if (!user) {
       return res.status(404).json({
@@ -85,10 +82,18 @@ exports.getMe = async (req, res) => {
 };
 
 exports.refreshToken = async (req, res) => {
-  const { userId } = req.body;
-  console.log("User ID received:", userId); // Първи дебъг съобщение
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
+  const token = authHeader.split(" ")[1];
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+
+    console.log("User ID received:", userId); // Дебъг съобщение
+
     console.log("Searching for refresh token in the database...");
     const storedRefreshToken = await RefreshToken.findOne({ userId });
 
@@ -103,7 +108,7 @@ exports.refreshToken = async (req, res) => {
     }
 
     console.log("Refresh token found, generating new access token...");
-    const newAccessToken = signToken(userId);
+    const newAccessToken = userService.signToken(userId);
 
     console.log("New access token generated:", newAccessToken); // Показва новия access token
     res.status(200).json({ accessToken: newAccessToken });
@@ -112,5 +117,3 @@ exports.refreshToken = async (req, res) => {
     res.status(403).json({ message: "Error refreshing token" });
   }
 };
-
-

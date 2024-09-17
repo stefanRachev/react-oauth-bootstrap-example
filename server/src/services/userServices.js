@@ -7,11 +7,12 @@ const RefreshToken = require("../models/RefreshToken");
 
 
 
-const signToken = (userId) => {
+exports.signToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1m" });
 };
 
-const signRefreshToken = (userId) => {
+
+exports.signRefreshToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
   });
@@ -24,8 +25,8 @@ exports.registerUser = async (email, password, username) => {
   }
 
   const newUser = await User.create({ email, password, username });
-  const accessToken = signToken(newUser._id);
-  const refreshToken = signRefreshToken(newUser._id);
+  const accessToken = exports.signToken(user._id);
+  const refreshToken = exports.signRefreshToken(user._id);
 
   await RefreshToken.create({
     userId: newUser._id,
@@ -49,8 +50,8 @@ exports.loginUser = async (email, password) => {
 
   user.password = undefined;
 
-  const accessToken = signToken(user._id);
-  const refreshToken = signRefreshToken(user._id);
+  const accessToken = exports.signToken(user._id);
+  const refreshToken = exports.signRefreshToken(user._id);
 
   await RefreshToken.findOneAndDelete({ userId: user._id });
 
@@ -64,5 +65,6 @@ exports.loginUser = async (email, password) => {
     accessToken,
     refreshToken,
     user,
+
   };
 };

@@ -19,55 +19,79 @@ const OpinionList = ({ opinions, onDelete, onEdit }) => {
     setEditMode(null);
   };
 
+  
+
   return (
     <div>
-      {opinions.map((opinion) => (
-        <Card key={opinion._id} className="mb-3">
-          <Card.Body>
-            {editMode === opinion._id ? (
-              <div>
-                <input
-                  type="text"
-                  value={editText}
-                  onChange={(e) => setEditText(e.target.value)}
-                />
-                <Button
-                  variant="primary"
-                  onClick={() => handleSaveClick(opinion._id)}
-                >
-                  Save
-                </Button>
-                <Button variant="secondary" onClick={() => setEditMode(null)}>
-                  Cancel
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <Card.Text>{opinion.text}</Card.Text>
-                {user &&
-                  opinion.author &&
-                  user._id === opinion.author._id.toString() && (
-                    <>
-                      <Button
-                        variant="warning"
-                        onClick={() => handleEditClick(opinion)}
-                        className="me-2"
-                      >
-                        Редактирай
-                      </Button>
-                      <Button
-                        variant="danger"
-                        onClick={() => onDelete(opinion._id)}
-                      >
-                        Изтрий
-                      </Button>
-                    </>
-                  )}
-              </div>
-            )}
-          </Card.Body>
-        </Card>
-      ))}
+      {opinions.map((opinion) => {
+        if (
+          !opinion ||
+          !opinion._id ||
+          !opinion.text ||
+          !opinion.author ||
+          !opinion.author.username ||
+          !opinion.createdAt
+        ) {
+          console.warn("Invalid opinion data:", opinion);
+          return null;
+        }
+
+        return (
+          <Card key={opinion._id} className="mb-3">
+            <Card.Body>
+              {editMode === opinion._id ? (
+                <div>
+                  <input
+                    type="text"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+                  <Button
+                    variant="primary"
+                    onClick={() => handleSaveClick(opinion._id)}
+                  >
+                    Save
+                  </Button>
+                  <Button variant="secondary" onClick={() => setEditMode(null)}>
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  <Card.Text>{opinion.text}</Card.Text>
+                  <small>
+                    <strong>Author:</strong> {opinion.author.username}
+                  </small>
+                  <br />
+                  <small>
+                    <strong>Created At:</strong>{" "}
+                    {new Date(opinion.createdAt).toLocaleDateString()}
+                  </small>
+                  {user &&
+                    opinion.author &&
+                    user._id === opinion.author._id.toString() && (
+                      <>
+                        <Button
+                          variant="warning"
+                          onClick={() => handleEditClick(opinion)}
+                          className="me-2"
+                        >
+                          Редактирай
+                        </Button>
+                        <Button
+                          variant="danger"
+                          onClick={() => onDelete(opinion._id)}
+                        >
+                          Изтрий
+                        </Button>
+                      </>
+                    )}
+                </div>
+              )}
+            </Card.Body>
+          </Card>
+        );
+      })}
     </div>
   );
 };
@@ -79,7 +103,9 @@ OpinionList.propTypes = {
       text: PropTypes.string.isRequired,
       author: PropTypes.shape({
         _id: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
       }).isRequired,
+      createdAt: PropTypes.string.isRequired,
     })
   ).isRequired,
   onDelete: PropTypes.func.isRequired,

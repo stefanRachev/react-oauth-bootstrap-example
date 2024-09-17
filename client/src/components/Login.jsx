@@ -43,6 +43,7 @@ function Login() {
       if (response.ok) {
         console.log("Login successful:", data.accessToken);
         localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("tokenIssuedTime", Date.now());
 
         setUser(data.user);
         if (data.data && data.data.user) {

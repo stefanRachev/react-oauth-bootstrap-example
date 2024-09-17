@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import InputForm from "./InputForm ";
 import OpinionList from "./OpinionList";
-import { useUser } from "../../context/useUser";
+
 
 function OpinionPage() {
   const [opinions, setOpinions] = useState([]);
-  const { user } = useUser();
-
-  console.log(user);
+ 
 
   useEffect(() => {
     const fetchOpinions = async () => {

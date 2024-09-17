@@ -12,7 +12,7 @@ import ProtectedAccordion from "./components/ProtectedAccordion";
 import { UserProvider } from "./context/UserContext";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-ProtectedAccordion
+
 
 function App() {
   return (
