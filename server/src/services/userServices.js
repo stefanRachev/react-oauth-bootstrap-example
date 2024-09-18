@@ -25,13 +25,16 @@ exports.registerUser = async (email, password, username) => {
   }
 
   const newUser = await User.create({ email, password, username });
-  const accessToken = exports.signToken(user._id);
-  const refreshToken = exports.signRefreshToken(user._id);
 
+
+  const accessToken = exports.signToken(newUser._id);
+  const refreshToken = exports.signRefreshToken(newUser._id);
+
+ 
   await RefreshToken.create({
     userId: newUser._id,
     token: refreshToken,
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 дни
   });
 
   return {

@@ -57,6 +57,28 @@ exports.login = async (req, res) => {
   }
 };
 
+
+exports.logout = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+
+   console.log(userId);
+   
+    await RefreshToken.findOneAndDelete({ userId });
+
+    res.status(200).json({
+      status: "success",
+      message: "Logged out successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Server error",
+    });
+  }
+};
+
+
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");

@@ -52,7 +52,8 @@ function Register() {
       });
 
       const data = await response.json();
-      //console.log(data.token);
+     console.log("test now"  + data.data);
+     
       
 
       if (response.ok) {
@@ -60,7 +61,7 @@ function Register() {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("tokenIssuedTime", Date.now());
 
-        setUser(data.user);
+        //setUser(data.user);
         if (data.data && data.data.user) {
           console.log("User data:", JSON.stringify(data.data.user));
           setUser(data.data.user);

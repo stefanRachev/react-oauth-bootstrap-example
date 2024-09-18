@@ -70,7 +70,7 @@ export const UserProvider = ({ children }) => {
         refreshToken(); // Ако токенът е изтекъл или е близо до изтичане
       }
     }
-  }, [tokenIssuedTime, refreshToken]);
+  }, [tokenIssuedTime, refreshToken, tokenLifetime]);
 
   // Функция за взимане на потребителските данни
   const fetchUser = useCallback(

@@ -6,6 +6,7 @@ const authenticateToken = require("./middlewares/authMiddleware");
 router.get("/me", authenticateToken, userController.getMe);
 router.post("/register", userController.register);
 router.post("/login", userController.login);
+router.post("/logout",authenticateToken, userController.logout);
 router.post("/refresh-token", userController.refreshToken);
 
 router.post("/opinions", authenticateToken, opinionController.createOpinion);
