@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import InputForm from "./InputForm ";
 import OpinionList from "./OpinionList";
-
+import { useUser } from "../../context/useUser";
 
 function OpinionPage() {
   const [opinions, setOpinions] = useState([]);
- 
+  const { token, refreshToken } = useUser();
 
   useEffect(() => {
     const fetchOpinions = async () => {
@@ -24,14 +24,24 @@ function OpinionPage() {
 
   const handleAddOpinion = async (text) => {
     try {
+      let accessToken = token;
+      if (!accessToken) {
+        accessToken = await refreshToken();
+      }
+
       const response = await fetch(`${import.meta.env.VITE_API_URL}/opinions`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ text }),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to add opinion");
+      }
+
       const newOpinion = await response.json();
       setOpinions([...opinions, newOpinion]);
     } catch (error) {
@@ -41,12 +51,17 @@ function OpinionPage() {
 
   const handleDeleteOpinion = async (id) => {
     try {
+      let accessToken = token;
+      if (!accessToken) {
+        accessToken = await refreshToken();
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/opinions/${id}`,
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -62,16 +77,18 @@ function OpinionPage() {
   };
 
   const handleEditOpinion = async (id, newText) => {
-    console.log("Updating opinion with id:", id);
-    console.log("New text:", newText);
-
     try {
+      let accessToken = token;
+      if (!accessToken) {
+        accessToken = await refreshToken();
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/opinions/${id}`,
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ text: newText }),

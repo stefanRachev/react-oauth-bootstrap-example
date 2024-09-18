@@ -19,8 +19,6 @@ const OpinionList = ({ opinions, onDelete, onEdit }) => {
     setEditMode(null);
   };
 
-  
-
   return (
     <div>
       {opinions.map((opinion) => {

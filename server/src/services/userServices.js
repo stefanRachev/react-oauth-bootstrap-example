@@ -4,13 +4,9 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const RefreshToken = require("../models/RefreshToken");
 
-
-
-
 exports.signToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1m" });
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
 };
-
 
 exports.signRefreshToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, {
@@ -30,7 +26,6 @@ exports.registerUser = async (email, password, username) => {
   const accessToken = exports.signToken(newUser._id);
   const refreshToken = exports.signRefreshToken(newUser._id);
 
- 
   await RefreshToken.create({
     userId: newUser._id,
     token: refreshToken,

@@ -5,9 +5,6 @@ import { useUser } from "../context/useUser";
 function HomePage() {
   const { user } = useUser();
 
-  
-  
-
   return (
     <Container>
       <Row className="justify-content-center">
@@ -49,7 +46,6 @@ function HomePage() {
           </Row>
           <Row>
             <Col>
-            
               <h2>User Information</h2>
               {user ? (
                 <div>
