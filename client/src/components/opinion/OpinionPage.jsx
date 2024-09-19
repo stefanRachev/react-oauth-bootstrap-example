@@ -5,7 +5,7 @@ import { useUser } from "../../context/useUser";
 
 function OpinionPage() {
   const [opinions, setOpinions] = useState([]);
-  const { token, refreshToken } = useUser();
+  const { refreshToken, fetchUser, token } = useUser();
 
   useEffect(() => {
     const fetchOpinions = async () => {
@@ -27,6 +27,8 @@ function OpinionPage() {
       let accessToken = token;
       if (!accessToken) {
         accessToken = await refreshToken();
+
+        await fetchUser(accessToken);
       }
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/opinions`, {

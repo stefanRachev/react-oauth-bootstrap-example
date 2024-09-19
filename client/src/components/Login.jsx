@@ -12,7 +12,7 @@ function Login() {
   });
 
   const [error, setError] = useState("");
-  const { setUser } = useContext(UserContext);
+  const { setUser,setToken} = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -44,11 +44,9 @@ function Login() {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("tokenIssuedTime", Date.now());
 
-        setUser(data.user);
-        if (data.data && data.data.user) {
-          setUser(data.data.user);
-        }
-
+        setUser(data.data.user);
+        setToken(data.accessToken);
+      
         setError("");
         setFormData({
           email: "",
